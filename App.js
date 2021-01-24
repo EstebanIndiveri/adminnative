@@ -25,7 +25,7 @@ const theme={
   colors:{
     ...DefaultTheme.colors,
     primary:'#1774F2',
-    accent:'#0655BF'
+    accent:'#0655BF',
   }
 };
 // console.log(theme.colors.primary);
