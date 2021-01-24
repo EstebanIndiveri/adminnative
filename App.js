@@ -33,6 +33,7 @@ const theme={
 const App = () => {
   return (
     <>
+    <PaperProvider>
     <StatusBar  backgroundColor="transparent" translucent barStyle="light-content"/>
       <NavigationContainer>
         <Stack.Navigator
@@ -84,6 +85,7 @@ const App = () => {
           />
         </Stack.Navigator>
       </NavigationContainer>
+      </PaperProvider>
     </>
   );
 };

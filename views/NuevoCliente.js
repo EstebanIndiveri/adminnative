@@ -1,27 +1,48 @@
 import React,{useState} from 'react';
 import { Text,StyleSheet, View } from 'react-native';
-import {Button, TextInput,Headline} from 'react-native-paper';
+import {Button, TextInput,Headline,Paragraph,Dialog,Portal} from 'react-native-paper';
 import globalStyles from '../styles/global';
+import axios from 'axios';
 
-const NuevoCliente = () => {
+const NuevoCliente = ({navigation}) => {
 
     const [nombre, setnombre] = useState('');
     const [telefono, setTelefono] = useState('');
     const [correo, setCorreo] = useState('');
     const [empresa, setEmpresa] = useState('');
+    const [alerta, setAlerta] = useState(false);
 
-    const guardarCliente=()=>{
+    const guardarCliente=async()=>{
         // console.log('guardando c');
         // validar
         if(nombre===''|| telefono===''||correo===''||empresa===''){
-            console.log('campos vacios');
+            // console.log('campos vacios');
+            setAlerta(true);
             return;
         }
-        console.log('guardado');
+        // console.log('guardado');
         // generar
+        const cliente={
+            nombre,
+            telefono,
+            empresa,
+            correo
+        }
         // save 
+        try {
+            await axios.post('http://192.168.0.49:3000/clientes',cliente);
+            // await axios.post('http://localhost:3000/clientes',cliente);
+        } catch (error) {
+            console.log(error);
+            
+        }
         // Rediraect
+        navigation.navigate('Inicio');
         // clear form
+        setnombre('');
+        setTelefono('');
+        setCorreo('');
+        setEmpresa('');
     }
         
     return (
@@ -63,9 +84,23 @@ const NuevoCliente = () => {
             underlineColor='#fff'
             theme={{colors: {text: '#323232', primary: "#1774F2"}}}
             />
-            <Button icon="pencil-circle" mode="contained" onPress={()=>guardarCliente()}>
+            <Button icon="pencil-circle" mode="contained" style={styles.btnSubmit} onPress={()=>guardarCliente()}>
                 Guardar Cliente
             </Button>
+            <Portal>
+                <Dialog
+                onDismiss={()=>setAlerta(false)}
+                visible={alerta}
+                >
+                    <Dialog.Title>Error</Dialog.Title>
+                    <Dialog.Content>
+                        <Paragraph>Todos los campos son obligatorios</Paragraph>
+                    </Dialog.Content>
+                    <Dialog.Actions>
+                        <Button onPress={()=>setAlerta(false)}>OK</Button>
+                    </Dialog.Actions>
+                </Dialog>
+            </Portal>
         </View>
      );
 }
@@ -73,6 +108,9 @@ const styles=StyleSheet.create({
     input:{
         marginBottom:20,
         backgroundColor:'transparent',
+    },
+    btnSubmit:{
+        backgroundColor:'#1774F2',
     }
 })
  
