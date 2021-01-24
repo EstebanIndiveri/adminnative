@@ -33,6 +33,7 @@ const theme={
 const App = () => {
   return (
     <>
+    <StatusBar  backgroundColor="transparent" translucent barStyle="light-content"/>
       <NavigationContainer>
         <Stack.Navigator
         initialRouteName="Inicio"
