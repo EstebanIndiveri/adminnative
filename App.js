@@ -52,8 +52,9 @@ const App = () => {
           transitionSpec:{
             open:config,
             close:closeConfig
-          }
+          },
         }}
+        headerMode="float"
         >
           <Stack.Screen
           name="Inicio"
@@ -107,6 +108,7 @@ const config = {
 const closeConfig={
   animation:'timing',
   config:{ 
+    overshootClamping: false,
     duration:500,
     easing:Easing.linear
   },
