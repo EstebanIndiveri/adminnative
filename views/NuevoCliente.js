@@ -1,16 +1,31 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import { Text,StyleSheet, View } from 'react-native';
 import {Button, TextInput,Headline,Paragraph,Dialog,Portal} from 'react-native-paper';
 import globalStyles from '../styles/global';
 import axios from 'axios';
 
-const NuevoCliente = ({navigation}) => {
+const NuevoCliente = ({navigation,route}) => {
+
+    const {setConsultarAPI}=route.params;
 
     const [nombre, setnombre] = useState('');
     const [telefono, setTelefono] = useState('');
     const [correo, setCorreo] = useState('');
     const [empresa, setEmpresa] = useState('');
     const [alerta, setAlerta] = useState(false);
+
+    useEffect(() => {
+        if(route.params.cliente){
+            // console.log('estamos editanto');
+            const {nombre,telefono,correo,empresa}=route.params.cliente;
+            setnombre(nombre);
+            setTelefono(telefono);
+            setCorreo(correo);
+            setEmpresa(empresa);
+        }else{
+            console.log('new');
+        }
+    }, []);
 
     const guardarCliente=async()=>{
         // console.log('guardando c');
@@ -29,12 +44,23 @@ const NuevoCliente = ({navigation}) => {
             correo
         }
         // save 
-        try {
-            await axios.post('http://192.168.0.49:3000/clientes',cliente);
-            // await axios.post('http://localhost:3000/clientes',cliente);
-        } catch (error) {
-            console.log(error);
-            
+        // edit o create new
+        if(route.params.cliente){
+            const {id}=route.params.cliente;
+            cliente.id=id;
+            const url=`http://192.168.0.49:3000/clientes/${id}`
+            try {
+                await axios.put(url,cliente);
+            } catch (error) {
+                console.log(error);
+            }
+        }else{
+            try {
+                await axios.post('http://192.168.0.49:3000/clientes',cliente);
+                // await axios.post('http://localhost:3000/clientes',cliente);
+            } catch (error) {
+                console.log(error);
+            }
         }
         // Rediraect
         navigation.navigate('Inicio');
@@ -43,7 +69,8 @@ const NuevoCliente = ({navigation}) => {
         setTelefono('');
         setCorreo('');
         setEmpresa('');
-    }
+        setConsultarAPI(true);
+    };
         
     return (
         <View style={globalStyles.container}>
