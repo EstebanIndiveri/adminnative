@@ -108,10 +108,10 @@ const config = {
 const closeConfig={
   animation:'timing',
   config:{ 
-    overshootClamping: false,
-    duration:500,
-    easing:Easing.linear
+    // overshootClamping: false,
+    duration:200,
+    easing:Easing.linear,
   },
-}
+};
 
 export default App;
