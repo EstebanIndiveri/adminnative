@@ -25,6 +25,7 @@ const NuevoCliente = ({navigation,route}) => {
         }else{
             console.log('new');
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const guardarCliente=async()=>{
